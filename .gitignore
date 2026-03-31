@@ -1,0 +1,35 @@
+### --- BACKEND (Java/Maven) --- ###
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/.idea/
+backend/*.iml
+backend/help.md
+
+### --- FRONTEND (React/Node) --- ###
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/.vscode/
+frontend/.idea/
+
+### --- DATABASE & DOCKER --- ###
+.env
+.env.local
+.env.*.local
+docker/db_data/
+*.log
+
+### --- IDE & SYSTEM --- ###
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
