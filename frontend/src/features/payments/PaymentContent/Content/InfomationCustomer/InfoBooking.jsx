@@ -1,14 +1,14 @@
 import KingBedOutlinedIcon from '@mui/icons-material/KingBedOutlined'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
-import { Typography } from '@mui/material'
+import { Divider, Stack, Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import { Box } from '@mui/system'
+import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined'
 
 const InfoBooking = () => {
   const roomOptions = [
-    'Phòng không hút thuốc',
     'Phòng liên thông',
     'Tầng lầu',
     'Ban công',
@@ -31,28 +31,62 @@ const InfoBooking = () => {
         display: 'flex',
         justifyContent: 'space-between'
       }}>
-        <Box sx={{ display: 'flex', gap: 2.5 }}>
-          <Box>
-            <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '1rem', borderBottom: '1px solid #f19fb9' }}>Checkin</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '600', fontSize: '1.125rem', marginTop: 2 }}>Thứ 7, 4 tháng 04 2026</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#5e5e5e', fontWeight: '500', fontSize: '0.875rem' }}>Từ 14:00</Typography>
-          </Box>
-          <Box>
-            <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '1rem', borderBottom: '1px solid #f19fb9' }}>checkout</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '600', fontSize: '1.125rem', marginTop: 2 }}>Thứ 2, 8 tháng 04 2026</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#5e5e5e', fontWeight: '500', fontSize: '0.875rem' }}>Trước 12:00</Typography>
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2.5 }}>
-          <Box>
-            <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '1rem', borderBottom: '1px solid #f19fb9' }}>Nights</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '600', fontSize: '1.125rem', marginTop: 2 }}>2</Typography>
-          </Box>
-          <Box>
-            <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '1rem', borderBottom: '1px solid #f19fb9' }}>People</Typography>
-            <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '600', fontSize: '1.125rem', marginTop: 2 }}>4</Typography>
-          </Box>
-        </Box>
+
+
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 3, sm: 4 }}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ p: 2, bgcolor: '#fff', borderRadius: 2, width: '100%' }}
+        >
+
+          <Stack direction="row" spacing={4}>
+            <Box>
+              <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '0.9rem', borderBottom: '2px solid #f19fb9', pb: 0.5 }}>
+                Checkin
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '700', fontSize: { xs: '1rem', sm: '1.125rem' }, mt: 1.5 }}>
+                Thứ 7, 4 thg 4
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#5e5e5e', fontWeight: '500', fontSize: '0.8rem' }}>
+                Từ 14:00
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '0.9rem', borderBottom: '2px solid #f19fb9', pb: 0.5 }}>
+                Checkout
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '700', fontSize: { xs: '1rem', sm: '1.125rem' }, mt: 1.5 }}>
+                Thứ 2, 8 thg 4
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#5e5e5e', fontWeight: '500', fontSize: '0.8rem' }}>
+                Trước 12:00
+              </Typography>
+            </Box>
+          </Stack>
+          <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', sm: 'block' } }} />
+          <Stack direction="row" spacing={4}>
+            <Box>
+              <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '0.9rem', borderBottom: '2px solid #f19fb9', pb: 0.5 }}>
+                Nights
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '700', fontSize: '1.25rem', mt: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                2<DarkModeOutlinedIcon />
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography sx={{ textAlign: 'center', color: 'primary.main', fontWeight: '600', fontSize: '0.9rem', borderBottom: '2px solid #f19fb9', pb: 0.5 }}>
+                People
+              </Typography>
+              <Typography sx={{ textAlign: 'center', color: '#3f3f3f', fontWeight: '700', fontSize: '1.25rem', mt: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                4<PeopleOutlineOutlinedIcon />
+              </Typography>
+            </Box>
+          </Stack>
+        </Stack>
       </Box>
 
       <Box sx={{ marginTop: 1 }}>
@@ -70,7 +104,7 @@ const InfoBooking = () => {
           />
         ))}
       </Box>
-    </Box>
+    </Box >
   )
 }
 
