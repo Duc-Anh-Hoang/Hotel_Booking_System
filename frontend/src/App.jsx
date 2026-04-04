@@ -1,9 +1,9 @@
-
+import Payments from "./features/payments/_id"
 
 function App() {
   return (
     <>
-      <div>hello</div>
+      <Payments />
     </>
   )
 }

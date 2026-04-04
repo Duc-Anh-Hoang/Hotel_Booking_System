@@ -1,143 +1,92 @@
 import { extendTheme } from '@mui/material/styles'
 
-//import { lightGreen } from '@mui/material/colors';
+const HEADER_HEIGHT = '58px'
+const PAYMENT_BAR_HEIGHT = '50px'
 
-const APP_BAR_HEIGHT = '58px'
-const PROBLEMS_BAR_HEIGHT = '50px'
-const PROBLEM_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${PROBLEMS_BAR_HEIGHT})`
-// const COLUMN_HEADER_HEIGHT = '50px'
-// const COLUMN_FOOTER_HEIGHT = '56px'
-// Create a theme instance.
 const theme = extendTheme({
-  codesapces: {
-    appBarHeight: APP_BAR_HEIGHT,
-    problemdBarHeight: PROBLEMS_BAR_HEIGHT,
-    problemContentHeight: PROBLEM_CONTENT_HEIGHT
-    // columnHeaderHeight: COLUMN_HEADER_HEIGHT,
-    // columnFooterHeight: COLUMN_FOOTER_HEIGHT
+  hotel_booking: {
+    headerHeight: HEADER_HEIGHT,
+    payment: {
+      paymentBarHeight: PAYMENT_BAR_HEIGHT,
+      paymentContentHeight: `calc(100vh - ${HEADER_HEIGHT} - ${PAYMENT_BAR_HEIGHT})`
+    }
   },
   colorSchemes: {
     light: {
       palette: {
         primary: {
-          main: '#fdf0f5',
-          contrastText: '#f19fb9'
+          main: '#f19fb9',
+          light: '#fcd4e4',
+          contrastText: '#ffffff'
         },
+        text: {
+          primary: '#383838',
+          secondary: '#606060'
+        },
+        background: {
+          paper: '#ffffff',
+          default: '#fafafa'
+        }
       }
-
-    },
-    // dark: {
-    //   palette: {
-    //     primary: {
-    //       main: '#222526',
-    //       contrastText: '#fafafa'
-    //     }
-    //   }
-    // }
+    }
   },
   colorSchemeSelector: 'class',
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          color: 'var(--mui-palette-primary-contrastText)',
-          fontSize: '1rem',
-          boxShadow: 'none',
-          '&:hover': { boxShadow: 'none' }
-        }
-      }
-    },
     MuiTypography: {
       styleOverrides: {
         root: {
-          '&.MuiTypography-body1': { fontSize: '0.875rem' }
-        }
+          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+        },
+        body1: { fontSize: '0.875rem' },
+        h6: { fontWeight: '550' }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: {
-          color: 'var(--mui-palette-primary-contrastText)',
-          fontSize: '0.875rem'
-
-        }
-      }
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& input': {
-            color: 'var(--mui-palette-primary-contrastText)'
-          },
-          '& label.Mui-focused': {
-            color: 'var(--mui-palette-primary-contrastText)'
-          },
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'var(--mui-palette-secondary-main)'
-            },
-            '&:hover fieldset': {
-              borderColor: 'var(--mui-palette-secondary-main)'
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'var(--mui-palette-secondary-main)'
-            }
+        root: ({ theme }) => ({
+          fontSize: '0.875rem',
+          color: theme.vars.palette.primary.main,
+          '&.Mui-focused': {
+            color: theme.vars.palette.primary.main
           }
-        }
-      }
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: '#ffffff',
-          color: '#535454',
-          fontSize: '0.75rem',
-          borderRadius: 6,
-          boxShadow: '0 0 3px rgba(0,0,0,0.15)',
-          padding: '6px 12px'
-        }
-      }
-    },
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          minHeight: '40px'
-
-        },
-        indicator: {
-          bottom: 0,
-          height: 2,
-          backgroundColor: 'var(--mui-palette-secondary-main)'
-        }
-      }
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          minHeight: '40px',
-          minWidth: 0,
-          padding: '6px 12px',
-          color: 'var(--mui-palette-primary-contrastText)',
-          '&.Mui-selected .MuiSvgIcon-root': {
-            color: 'var(--mui-palette-secondary-main) !important',
-            fontWeight: 600
-          },
-          '&.Mui-selected .MuiTypography-root': {
-            color: 'var(--mui-palette-secondary-main) !important',
-            fontWeight: 600
-          }
-        }
-
+        })
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          borderRadius: '8px',
           fontSize: '0.875rem',
-          '& fieldset': { borderWidth: '0.5px !important' },
-          '&:hover fieldset': { borderWidth: '1px !important' },
-          '&.Mui-focused fieldset': { borderWidth: '1px !important' }
+          backgroundColor: '#fff',
+          '& fieldset': {
+            borderColor: theme.vars.palette.primary.main
+          },
+          '&:hover fieldset': {
+            borderColor: `${theme.vars.palette.primary.main} !important`,
+            borderWidth: '1.5px'
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: theme.vars.palette.primary.main,
+            borderWidth: '1px'
+          }
+        }),
+        input: {
+          padding: '8px 12px'
+        }
+      }
+    },
+    MuiTextField: {
+      defaultProps: {
+        size: 'small'
+      }
+    },
+    // Fix luôn cho Select để đồng bộ với TextField
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          padding: '8px 12px',
+          display: 'flex',
+          alignItems: 'center'
         }
       }
     }
