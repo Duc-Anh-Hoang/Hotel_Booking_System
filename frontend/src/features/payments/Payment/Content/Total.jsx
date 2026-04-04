@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 
 const Total = ({ card }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: { xs: 'row', md: 'column' }, gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <CardVisual number={card.join('')} />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <OrderSummary />
