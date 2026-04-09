@@ -1,0 +1,159 @@
+spring:
+  application:
+    name: hotel
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  level:
+    root: WARN
+    com.hotel: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{HH:mm:ss} [%level] %logger{36} - %msg%n"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=HotelBookingDB;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: 123456
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      pool-name: HBMS-Local-Pool
+      maximum-pool-size: 5
+  jpa:
+    show-sql: true
+
+app:
+  jwt:
+    secret: hbms-hotel-booking-secret-key-2026-btl-java
+    expiration: 900000
+    refresh-expiration: 604800000
+  cors:
+    allowed-origins:
+      - "http://localhost:5173"
+      - "http://localhost:3000"
+  payment:
+    vnpay:
+      tmn-code: SANDBOX_TMN
+      hash-secret: SANDBOX_SECRET
+      pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      return-url: http://localhost:5173/payments/vnpay/callback
+    momo:
+      partner-code: SANDBOX_PARTNER
+      access-key: SANDBOX_ACCESS
+      secret-key: SANDBOX_SECRET
+      endpoint: https://test-payment.momo.vn/v2/gateway/api/create
+      return-url: http://localhost:5173/payments/momo/callback
+  openai:
+    api-key: sk-your-local-test-key
+    model: gpt-4o-mini
+    max-tokens: 500
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiAudioSpeechAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiAudioTranscriptionAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiImageAutoConfiguration
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      pool-name: HBMS-Docker-Pool
+      maximum-pool-size: 10
+      minimum-idle: 3
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+  jpa:
+    show-sql: false
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET}
+    expiration: ${APP_JWT_EXPIRATION:900000}
+    refresh-expiration: ${APP_JWT_REFRESH_EXPIRATION:604800000}
+  cors:
+    allowed-origins:
+      - "http://localhost"
+      - "http://localhost:5173"
+  payment:
+    vnpay:
+      tmn-code: ${APP_VNPAY_TMN_CODE}
+      hash-secret: ${APP_VNPAY_HASH_SECRET}
+      pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      return-url: http://localhost/payments/vnpay/callback
+    momo:
+      partner-code: ${APP_MOMO_PARTNER_CODE}
+      access-key: ${APP_MOMO_ACCESS_KEY}
+      secret-key: ${APP_MOMO_SECRET_KEY}
+      endpoint: https://test-payment.momo.vn/v2/gateway/api/create
+      return-url: http://localhost/payments/momo/callback
+  openai:
+    api-key: ${APP_OPENAI_API_KEY}
+    model: gpt-4o-mini
+    max-tokens: 500
+
+logging:
+  file:
+    name: /app/logs/hbms.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7

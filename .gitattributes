@@ -1,0 +1,6 @@
+# Tự động phát hiện các file text và chuẩn hóa về LF khi commit
+* text=auto eol=lf
+
+# Giữ nguyên định dạng cho các file script để không lỗi trên Docker/Linux
+*.sh text eol=lf
+Dockerfile text eol=lf

@@ -1,7 +1,7 @@
 import { Box, Grid } from '@mui/material'
 import InfomationRental from './Content/InfomationRental'
 import InfomationCustomer from './Content/InfomationCustomer'
-import Checkout from './Content/checkout'
+import Checkout from './Content/Checkout'
 import Policy from './Content/Policy'
 
 const Review = () => {
