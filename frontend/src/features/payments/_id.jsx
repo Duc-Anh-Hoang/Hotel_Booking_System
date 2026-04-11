@@ -17,7 +17,16 @@ function Payments() {
   }, [step])
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+    <Container disableGutters
+      maxWidth={false}
+      sx={{
+        minHeight: '100vh',
+        bgcolor: '#ffffff',
+        backgroundImage: `
+            radial-gradient(circle 600px at 0% 200px, #fce7f3, transparent),
+            radial-gradient(circle 600px at 100% 500px, #fce7f3, transparent) 
+          `
+      }}>
       <Header />
       <PaymentBar activeStep={activeStep} />
 
