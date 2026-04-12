@@ -36,3 +36,4 @@ docker/db_data/
 *.sw?
 .DS_Store
 Thumbs.db
+out/
