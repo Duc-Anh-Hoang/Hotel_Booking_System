@@ -1,4 +1,31 @@
 package com.hotel.modules.room.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name="RoomTypes", schema = "dbo")
+@Getter
+@Setter
 public class RoomType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "type_id")
+    private Integer typeId;
+
+    @Column(name="type_name", nullable=false, length=100)
+    private String typeName;
+
+    @Column(name="description", length=500)
+    private String description;
+
+    @Column(name = "base_price", nullable = false, precision = 18, scale = 2)
+    private BigDecimal basePrice;
+
+    @Column(name = "max_occupancy", nullable = false)
+    private Byte maxOccupancy;
 }
+
