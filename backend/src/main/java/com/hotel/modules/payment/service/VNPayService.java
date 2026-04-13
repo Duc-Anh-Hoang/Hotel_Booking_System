@@ -2,8 +2,8 @@ package com.hotel.modules.payment.service;
 
 import com.hotel.common.utils.CryptoUtil;
 import com.hotel.modules.payment.constant.VNPayParams;
-import com.hotel.modules.payment.dto.request.PaymentRequest;
-import com.hotel.modules.payment.dto.response.PaymentResponse;
+import com.hotel.modules.payment.dto.request.VNPayRequest;
+import com.hotel.modules.payment.dto.response.VNPayResponse;
 import com.hotel.modules.payment.entity.Currency;
 import com.hotel.modules.payment.entity.Locale;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class VNPayService implements  PaymentService{
+public class VNPayService implements IVNPayService {
     private static final String VERSION = "2.1.0";
     private static final String COMMAND = "pay";
     private static final String ORDER_TYPE = "other";
@@ -39,7 +39,7 @@ public class VNPayService implements  PaymentService{
     private String paymentPrefixUrl;
 
     @Override
-    public PaymentResponse init(PaymentRequest request){
+    public VNPayResponse init(VNPayRequest request){
         String amount = String.valueOf(Integer.parseInt(request.getAmount()) * 100);
         String txnRef = request.getTxnRef(); //booking id
         String returnUrl = buildReturnUrl(txnRef);
@@ -74,7 +74,7 @@ public class VNPayService implements  PaymentService{
         params.put(VNPayParams.ORDER_TYPE, ORDER_TYPE);
 
         String initPaymentUrl = buildInitPaymentUrl(params);
-        return PaymentResponse.builder()
+        return VNPayResponse.builder()
                 .vnpUrl(initPaymentUrl)
                 .build();
     }
@@ -82,7 +82,7 @@ public class VNPayService implements  PaymentService{
     private String buildReturnUrl(String txnRef) {
         return returnUrlFormat;
     }
-    private String buildPaymentDetail(PaymentRequest request) {
+    private String buildPaymentDetail(VNPayRequest request) {
         return String.format("Thanh toan don hang: %s | Ma giao dich: %s",
                 request.getTxnRef(),
                 request.getRequestId());

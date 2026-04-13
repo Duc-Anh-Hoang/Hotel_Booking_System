@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
+@Service("vnpayIpnHandler")
 @RequiredArgsConstructor
 public class VNPayIpnHandler implements  IpnHandler {
     private final VNPayService vnPayService;

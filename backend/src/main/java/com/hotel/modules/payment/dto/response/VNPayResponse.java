@@ -6,6 +6,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentResponse {
+public class VNPayResponse {
     private String vnpUrl;
 }

@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Locale {
     VIETNAM("vn"),
+    VIETNAMVI("vi"),
     ENGLISH("en");
+
 
     private final String code;
 }

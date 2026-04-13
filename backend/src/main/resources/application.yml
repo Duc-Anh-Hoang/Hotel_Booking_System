@@ -89,11 +89,13 @@ app:
       return-url: http://localhost:5173/payment/?step=3
       timeout: 15
     momo:
-      partner-code: SANDBOX_PARTNER
-      access-key: SANDBOX_ACCESS
-      secret-key: SANDBOX_SECRET
-      endpoint: https://test-payment.momo.vn/v2/gateway/api/create
-      return-url: http://localhost:5173/payments/momo/callback
+      partner-code: MOMOLRJZ20181206
+      access-key: mTCKt9W3eU1m39TW
+      secret-key: SetA5RDnLHvt51AULf51DyauxUo3kDU6
+      endpoint-url: https://test-payment.momo.vn/v2/gateway/api/create
+      return-url: http://localhost:5173/payment/
+      request-type: captureWallet
+      ipn-url: https://webhook.site/784642fe-feb2-4b1e-a31f-65e2e9349f6d
   openai:
     api-key: "sk-your-local-test-key"
     model: gpt-4o-mini

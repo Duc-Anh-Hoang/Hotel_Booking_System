@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentRequest {
+public class VNPayRequest {
     private String amount;
     private String txnRef;
     private String ipAddress;

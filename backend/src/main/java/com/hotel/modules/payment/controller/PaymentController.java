@@ -1,14 +1,17 @@
 package com.hotel.modules.payment.controller;
 
-import com.hotel.modules.payment.dto.request.PaymentRequest;
+import com.hotel.modules.payment.dto.request.MoMoRequest;
+import com.hotel.modules.payment.dto.request.VNPayRequest;
 import com.hotel.modules.payment.dto.response.IpnResponse;
-import com.hotel.modules.payment.dto.response.PaymentResponse;
+import com.hotel.modules.payment.dto.response.MomoResponse;
+import com.hotel.modules.payment.dto.response.VNPayResponse;
+import com.hotel.modules.payment.service.IMomoService;
 import com.hotel.modules.payment.service.IpnHandler;
-import com.hotel.modules.payment.service.PaymentService;
+import com.hotel.modules.payment.service.IVNPayService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,22 +19,40 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/payments")
-@RequiredArgsConstructor
 public class PaymentController {
-    private  final IpnHandler ipnHandler;
-    private final PaymentService paymentService;
-    @GetMapping("/vnpay_ipn")
-    IpnResponse processIpn(@RequestParam Map<String, String> params){
-        return ipnHandler.process(params);
+
+    private final IpnHandler momoIpnHandler;
+    private final IpnHandler vnpayIpnHandler;
+    private final IVNPayService vnpayService;
+    private final IMomoService momoService;
+    public PaymentController(
+            @Qualifier("momoIpnHandler") IpnHandler momoHandler,
+            @Qualifier("vnpayIpnHandler") IpnHandler vnpayHandler, IVNPayService vnpayService, IMomoService momoService) {
+        this.momoIpnHandler = momoHandler;
+        this.vnpayIpnHandler = vnpayHandler;
+        this.vnpayService = vnpayService;
+        this.momoService = momoService;
     }
 
-    @PostConstruct
-    public void init() {
-        log.info(">>> PaymentController LOADED <<<");
+
+    @GetMapping("/vnpay_ipn")
+    IpnResponse processVNPayIpn(@RequestParam Map<String, String> params){
+        return vnpayIpnHandler.process(params);
     }
+
     @PostMapping("/vnpay_url")
-    PaymentResponse createVNPayUrl(@RequestBody PaymentRequest request){
-    return paymentService.init(request);
+    VNPayResponse createVNPayUrl(@RequestBody VNPayRequest request){
+    return vnpayService.init(request);
+    }
+
+    @PostMapping("/momo/create")
+    MomoResponse createMomoQR(@RequestBody MoMoRequest request){
+        return momoService.createQR(request);
+    }
+
+    @GetMapping("/momo_ipn")
+    IpnResponse processMomoIpn(@RequestParam Map<String, String> params){
+        return momoIpnHandler.process(params);
     }
 }
 
