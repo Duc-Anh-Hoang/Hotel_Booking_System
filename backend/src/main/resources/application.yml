@@ -8,7 +8,7 @@ spring:
       api-key: "sk-placeholder"
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
@@ -83,10 +83,11 @@ app:
       - "http://localhost:3000"
   payment:
     vnpay:
-      tmn-code: SANDBOX_TMN
-      hash-secret: SANDBOX_SECRET
-      pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-      return-url: http://localhost:5173/payments/vnpay/callback
+      tmn-code: BJ1R655A
+      hash-secret: MEBTJSYPU2ISDEAG32UYTLHRB70DU37J
+      pay-url:  https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      return-url: http://localhost:5173/payment/?step=3
+      timeout: 15
     momo:
       partner-code: SANDBOX_PARTNER
       access-key: SANDBOX_ACCESS
@@ -139,13 +140,13 @@ app:
       tmn-code: ${APP_VNPAY_TMN_CODE}
       hash-secret: ${APP_VNPAY_HASH_SECRET}
       pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-      return-url: http://localhost/payments/vnpay/callback
+      return-url: http://localhost:5173/payment/?step=3
     momo:
       partner-code: ${APP_MOMO_PARTNER_CODE}
       access-key: ${APP_MOMO_ACCESS_KEY}
       secret-key: ${APP_MOMO_SECRET_KEY}
       endpoint: https://test-payment.momo.vn/v2/gateway/api/create
-      return-url: http://localhost/payments/momo/callback
+      return-url: http://localhost:5173/payment/?step=3
   openai:
     api-key: ${APP_OPENAI_API_KEY}
     model: gpt-4o-mini
