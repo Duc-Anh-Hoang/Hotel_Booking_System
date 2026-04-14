@@ -8,6 +8,7 @@ import com.hotel.modules.room.repository.RoomRepository;
 import com.hotel.modules.room.repository.RoomTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class RoomTypeService {
     private final RoomRepository roomRepository;
     private final RoomTypeRepository roomTypeRepository;
+
+    //Query Operations
     public List<RoomTypeResponse> getAll(){
         return roomTypeRepository.findAll().stream().map(RoomTypeResponse::from).toList();
     }
@@ -23,39 +26,52 @@ public class RoomTypeService {
         RoomType roomType=findEntityById(id);
         return RoomTypeResponse.from(roomType);
     }
+
+    //Command Operations
+    @Transactional
     public RoomTypeResponse create(RoomTypeRequest req){
+        if(roomTypeRepository.existsByTypeName(req.getTypeName())){
+            throw new RuntimeException("Exist room type with name " + req.getTypeName());
+        }
         RoomType roomType=new RoomType();
-        roomType.setTypeName(req.getTypeName());
-        roomType.setDescription(req.getDescription());
-        roomType.setBasePrice(req.getBasePrice());
-        roomType.setMaxOccupancy(req.getMaxOccupancy());
+        mapRequestToEntity(req,roomType);
 
         RoomType save=roomTypeRepository.save(roomType);
         return RoomTypeResponse.from(save);
     }
+    @Transactional
     public RoomTypeResponse update(Integer id,RoomTypeRequest req){
         RoomType roomType=findEntityById(id);
-        roomType.setTypeName(req.getTypeName());
-        roomType.setDescription(req.getDescription());
-        roomType.setBasePrice(req.getBasePrice());
-        roomType.setMaxOccupancy(req.getMaxOccupancy());
+        if(!roomType.getTypeName().equals(req.getTypeName()) &&
+        roomTypeRepository.existsByTypeName(req.getTypeName())){
+            throw new RuntimeException("Exist room type with name " + req.getTypeName());
+        }
+        mapRequestToEntity(req,roomType);
 
         RoomType save=roomTypeRepository.save(roomType);
         return RoomTypeResponse.from(save);
     }
+    @Transactional
     public void delete(Integer id){
         if(!roomTypeRepository.existsById(id)){
-            throw new RuntimeException("Not found"+id);
+            throw new RuntimeException("Room type with id " + id + " does not exist");
         }
         if(roomRepository.existsByRoomType_TypeId(id)){
-            throw new RuntimeException("exists"+id);
+            throw new RuntimeException("Room type with id " + id + " already exists");
         }
         roomTypeRepository.deleteById(id);
     }
 
+    //Internal Helper Methods
     public RoomType findEntityById(Integer id){
         return roomTypeRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Not found"+id));
+                .orElseThrow(()-> new RuntimeException("Room type with id " + id + " does not exist"));
+    }
+    private void mapRequestToEntity(RoomTypeRequest req, RoomType roomType) {
+        roomType.setTypeName(req.getTypeName());
+        roomType.setDescription(req.getDescription());
+        roomType.setBasePrice(req.getBasePrice());
+        roomType.setMaxOccupancy(req.getMaxOccupancy());
     }
 
 
