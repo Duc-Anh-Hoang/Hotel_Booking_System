@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomTypeService {
     private final RoomRepository roomRepository;
     private final RoomTypeRepository roomTypeRepository;

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomTypeService roomTypeService;
