@@ -3,6 +3,7 @@ package com.hotel.modules.room.service;
 
 import com.hotel.modules.room.dto.RoomTypeRequest;
 import com.hotel.modules.room.dto.RoomTypeResponse;
+import com.hotel.modules.room.entity.RoomStatus;
 import com.hotel.modules.room.entity.RoomType;
 import com.hotel.modules.room.repository.RoomRepository;
 import com.hotel.modules.room.repository.RoomTypeRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomTypeService {
     private final RoomRepository roomRepository;
     private final RoomTypeRepository roomTypeRepository;
