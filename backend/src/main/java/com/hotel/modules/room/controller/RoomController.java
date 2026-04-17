@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/rooms")
 @RequiredArgsConstructor
 public class RoomController {
 
@@ -69,5 +69,9 @@ public class RoomController {
     public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
         roomService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<RoomResponse> updateRoomStatus(@PathVariable Long id, @RequestBody RoomStatus status) {
+        return ResponseEntity.ok(roomService.updateStatus(id, status));
     }
 }

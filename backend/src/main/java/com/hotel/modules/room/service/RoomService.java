@@ -78,6 +78,14 @@ public class RoomService {
         room.setStatus(RoomStatus.INACTIVE);
         roomRepository.save(room);
     }
+    @Transactional
+    public RoomResponse updateStatus(Long id, RoomStatus status) {
+        Room room=findEntityById(id);
+        room.setStatus(status);
+        room.setUpdatedAt(LocalDateTime.now());
+        roomRepository.save(room);
+        return RoomResponse.from(room);
+    }
 
     //Internal Helper Methods
     private void mapRequestToEntity(RoomRequest req, Room room, RoomType type) {
