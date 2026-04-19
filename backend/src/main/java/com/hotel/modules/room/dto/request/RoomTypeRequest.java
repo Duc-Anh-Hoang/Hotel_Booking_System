@@ -1,4 +1,4 @@
-package com.hotel.modules.room.dto;
+package com.hotel.modules.room.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

@@ -1,14 +1,12 @@
 package com.hotel.modules.room.service;
 
 
-import com.hotel.modules.room.dto.RoomRequest;
-import com.hotel.modules.room.dto.RoomResponse;
-import com.hotel.modules.room.dto.RoomTypeRequest;
+import com.hotel.modules.room.dto.request.RoomRequest;
+import com.hotel.modules.room.dto.response.RoomResponse;
 import com.hotel.modules.room.entity.Room;
-import com.hotel.modules.room.entity.RoomStatus;
+import com.hotel.modules.room.entity.enums.RoomStatus;
 import com.hotel.modules.room.entity.RoomType;
 import com.hotel.modules.room.repository.RoomRepository;
-import com.hotel.modules.room.repository.RoomTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

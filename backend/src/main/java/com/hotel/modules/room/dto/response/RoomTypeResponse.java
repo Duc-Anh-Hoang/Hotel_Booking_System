@@ -1,4 +1,4 @@
-package com.hotel.modules.room.dto;
+package com.hotel.modules.room.dto.response;
 
 import com.hotel.modules.room.entity.RoomType;
 import lombok.Getter;

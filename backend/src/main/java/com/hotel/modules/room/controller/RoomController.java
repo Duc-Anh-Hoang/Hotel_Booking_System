@@ -1,8 +1,8 @@
 package com.hotel.modules.room.controller;
 
-import com.hotel.modules.room.dto.RoomRequest;
-import com.hotel.modules.room.dto.RoomResponse;
-import com.hotel.modules.room.entity.RoomStatus;
+import com.hotel.modules.room.dto.request.RoomRequest;
+import com.hotel.modules.room.dto.response.RoomResponse;
+import com.hotel.modules.room.entity.enums.RoomStatus;
 import com.hotel.modules.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,6 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
-
-    static {
-        System.out.println("---------->>> SPRING DANG NAP ROOM CONTROLLER <<<----------");
-    }
 
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAllRooms() {

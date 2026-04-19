@@ -1,8 +1,8 @@
 package com.hotel.modules.room.controller;
 
 
-import com.hotel.modules.room.dto.RoomTypeRequest;
-import com.hotel.modules.room.dto.RoomTypeResponse;
+import com.hotel.modules.room.dto.request.RoomTypeRequest;
+import com.hotel.modules.room.dto.response.RoomTypeResponse;
 import com.hotel.modules.room.service.RoomTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

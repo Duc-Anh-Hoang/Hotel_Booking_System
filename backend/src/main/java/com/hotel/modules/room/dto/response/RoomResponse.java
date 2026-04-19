@@ -1,8 +1,8 @@
-package com.hotel.modules.room.dto;
+package com.hotel.modules.room.dto.response;
 
-import com.hotel.modules.room.entity.BedType;
+import com.hotel.modules.room.entity.enums.BedType;
 import com.hotel.modules.room.entity.Room;
-import com.hotel.modules.room.entity.RoomStatus;
+import com.hotel.modules.room.entity.enums.RoomStatus;
 import lombok.Getter;
 import lombok.Setter;
 
