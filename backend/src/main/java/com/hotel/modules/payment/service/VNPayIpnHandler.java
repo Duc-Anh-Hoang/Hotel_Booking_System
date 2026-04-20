@@ -3,11 +3,15 @@ package com.hotel.modules.payment.service;
 import com.hotel.modules.email.dto.EmailRequest;import com.hotel.modules.email.service.EmailService;import com.hotel.modules.payment.constant.VNPayParams;
 import com.hotel.modules.payment.constant.VnpIpnResponseConst;
 import com.hotel.modules.payment.dto.response.IpnResponse;
+import com.hotel.modules.payment.entity.Payment;
+import com.hotel.modules.payment.entity.PaymentStatus;
+import com.hotel.modules.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service("vnpayIpnHandler")
@@ -15,6 +19,8 @@ import java.util.Map;
 public class VNPayIpnHandler implements  IpnHandler {
     private final VNPayService vnPayService;
     private final EmailService emailService;
+    private final PaymentService paymentService;
+    private final PaymentRepository paymentRepository;
 
     @Override
     public IpnResponse process(Map<String, String> params){
@@ -23,43 +29,29 @@ public class VNPayIpnHandler implements  IpnHandler {
         }
         IpnResponse ipnResponse;
         String txnRef=  params.get(VNPayParams.TXN_REF);
+        String vnpAmount = params.get(VNPayParams.AMOUNT);
+        String responseCode = params.get("vnp_ResponseCode");
+        String transactionNo = params.get("vnp_TransactionNo");
         try{
-//            xử lý booking thanh cong
-//            Long BookingId = Long.parseLong(txnRef);
-//            bookingService.markBooked(bookingId);
-            //test send email khi thanh toan thanh cong
-            EmailRequest request = EmailRequest.builder()
-                    .toEmail("nguyenann1204@gmail.com")
-                    .buildingName("Hotel ABC")
-                    .buildingAdress("123 Nguyen Trai, HCM")
-                    .customerName("Nguyen Van A")
-                    .customerPhone("0901234567")
-                    .codeBooking("BK20260415")
-                    .dateBooking("2026-04-15")
-                    .dateCheckin("2026-04-20")
-                    .timeCheckin("14:00")
-                    .dateCheckout("2026-04-22")
-                    .timeCheckout("12:00")
-                    .night(2)
-                    .people(2)
-                    .priceBooking(800000L)
-                    .priceBreakfast(120000L)
-                    .feeService(50000L)
-                    .tax(80000L)
-                    .totalPrice(1050000L)
-                    .build();
-            try {
-                emailService.sendMailWithThymeleaf(request.getToEmail(), "Xác nhận thanh toán đặt phòng thành công", request);
-            } catch (Exception e) {
-                // Chỉ log lỗi gửi mail, KHÔNG return error cho VNPay
-                log.error("Lỗi gửi email xác nhận cho booking {}: {}", e.getMessage());
+            Payment payment = paymentService.findByTransactionId(txnRef);
+            if (payment == null) {
+                return VnpIpnResponseConst.ORDER_NOT_FOUND;
             }
+            long amountFromVNPay = Long.parseLong(vnpAmount) / 100;
+            if (payment.getAmount().longValue() != amountFromVNPay) {
+                return VnpIpnResponseConst.INVALID_AMOUNT;
+            }
+            if (!payment.getStatus().equals(PaymentStatus.PENDING)) {
+                return VnpIpnResponseConst.ORDER_ALREADY_CONFIRMED;
+            }
+            boolean isSuccess = "00".equals(responseCode);
 
+            paymentService.updatePaymentResult(payment, transactionNo, params.toString(), isSuccess);
+            if (isSuccess) {
+                emailService.sendConfirmationEmail(payment.getBooking());
+            }
             return VnpIpnResponseConst.SUCCESS;
         }
-//        catch (Exception e){
-//            kh co don boong king do
-//        }
         catch (Exception e){
             ipnResponse = VnpIpnResponseConst.UNKNOWN_ERROR;
         }

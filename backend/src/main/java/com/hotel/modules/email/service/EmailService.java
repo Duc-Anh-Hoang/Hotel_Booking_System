@@ -1,6 +1,9 @@
 package com.hotel.modules.email.service;
 
+import com.hotel.modules.booking.entity.Booking;
+import com.hotel.modules.booking.entity.User;
 import com.hotel.modules.email.dto.EmailRequest;
+import com.hotel.modules.room.entity.Room;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;import org.springframework.mail.SimpleMailMessage;
@@ -40,6 +43,45 @@ public class EmailService {
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void sendConfirmationEmail(Booking booking) {
+        try {
+            User user = booking.getUser();
+            Room room = booking.getRoom();
+            if(user == null || user.getEmail() == null) {
+                log.error("Không tìm thấy thông tin User hoặc Email cho Booking ID: {}", booking.getBookingId());
+                return;
+            }
+            Long priceBooking = booking.getRoomPriceSnapshot().longValue() * booking.getTotalNights();
+            Long tax = (Long) (priceBooking * 0.08);//tax o involve;
+            long totalPrice = priceBooking + tax;
+
+            EmailRequest request = EmailRequest.builder()
+                    .toEmail(user.getEmail())
+                    .buildingName("Toa nha ABC") // Có thể dùng @Value để lấy từ file properties
+                    .buildingAdress(room.getAddress())
+                    .customerName(user.getFullName())
+                    .customerPhone(user.getPhone())
+                    .codeBooking(booking.getBookingCode())
+                    .dateBooking(booking.getCreatedAt().toLocalDate().toString())
+                    .dateCheckin(booking.getCheckInDate().toString())
+                    .timeCheckin("14:00")
+                    .dateCheckout(booking.getCheckOutDate().toString())
+                    .timeCheckout("12:00")
+                    .night(Integer.valueOf(booking.getTotalNights()))
+                    .people(Integer.valueOf(booking.getNumGuests()))
+                    .priceBooking(priceBooking)
+                    .priceBreakfast(0L)
+                    .feeService(0L)
+                    .tax(tax)
+                    .totalPrice(totalPrice)
+                    .build();
+            String subject = "Xác nhận đặt phòng thành công - " + booking.getBookingCode();
+            sendMailWithThymeleaf(request.getToEmail(), subject, request);
+        } catch (Exception e) {
+            log.error("Lỗi gửi email xác nhận cho booking {}: {}", booking.getBookingId(), e.getMessage());
         }
     }
 }

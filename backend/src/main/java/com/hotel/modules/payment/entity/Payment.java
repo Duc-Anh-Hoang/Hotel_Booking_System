@@ -1,0 +1,62 @@
+package com.hotel.modules.payment.entity;
+
+import com.hotel.modules.booking.entity.Booking;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "Payments", uniqueConstraints = {
+        @UniqueConstraint(name = "UQ_Payments_TxnId", columnNames = "transaction_id")
+})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Payment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
+    private Long paymentId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", nullable = false, foreignKey = @ForeignKey(name = "FK_Payments_Booking"))
+    private Booking booking;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gateway", length = 20, nullable = false)
+    private PaymentGateway gateway;
+
+    @Column(name = "transaction_id", length = 255)
+    private String transactionId;
+
+    @Column(name = "amount", precision = 18, scale = 2, nullable = false)
+    private BigDecimal amount;
+
+    @Column(name = "currency", length = 10, nullable = false)
+    @Builder.Default
+    private String currency = "VND";
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, nullable = false)
+    @Builder.Default
+    private PaymentStatus status = PaymentStatus.PENDING;
+
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
+
+    @Column(name = "raw_response", columnDefinition = "NVARCHAR(MAX)")
+    private String rawResponse;
+
+    @Column(name = "ip_address", length = 50)
+    private String ipAddress;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+}
