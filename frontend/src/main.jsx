@@ -5,16 +5,17 @@ import { BrowserRouter } from 'react-router-dom'
 import React from 'react'
 import App from '~/App.jsx'
 import theme from './theme'
-
+import { AuthProvider } from './shared/context/AuthContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <React.StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ThemeProvider >
     </React.StrictMode>
   </BrowserRouter>
-
 )

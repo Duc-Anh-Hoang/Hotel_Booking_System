@@ -42,7 +42,7 @@ public class SecurityConfig {
                         // ── Public (ai cũng gọi được) ──
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(GET, "/rooms/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         // ── Cần đăng nhập ──
                         .requestMatchers("/bookings/**").hasAnyRole("CUSTOMER","ADMIN")
