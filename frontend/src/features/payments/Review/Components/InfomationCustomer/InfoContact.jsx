@@ -4,7 +4,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import TextField from '@mui/material/TextField'
-import CountryCode from './CountryCode/CountryCode'
+import CountryCode from './CountryCode'
 // import FieldErrorAlert from '~/components/common/Form/FieldErrorAlert'
 
 

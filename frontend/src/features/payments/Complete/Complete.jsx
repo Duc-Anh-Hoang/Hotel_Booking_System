@@ -1,8 +1,8 @@
 import {
   Box
 } from '@mui/material'
-import Invoice from './Content/Invoice'
-import StatusSuccess from './Content/statusSuccess'
+import Invoice from './Components/Invoice'
+import StatusSuccess from './Components/statusSuccess'
 
 const Complete = () => {
   const invoiceData = {

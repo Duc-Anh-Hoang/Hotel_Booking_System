@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
-import Info from './Content/Info'
-import Total from './Content/Total'
+import Info from './Components/Info'
+import Total from './Components/Total'
 
 const Payment = () => {
 
