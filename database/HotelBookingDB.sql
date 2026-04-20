@@ -405,6 +405,54 @@ CREATE TABLE Reviews (
     CONSTRAINT CK_Reviews_Value         CHECK (rating_value    IS NULL OR rating_value    BETWEEN 1 AND 5)
 );
 GO
+-- ----------------------------------------------------------
+-- 2.15 BẢNG: Conversations (Phiên hội thoại)
+-- Kết nối: Users (1-N)
+-- ----------------------------------------------------------
+CREATE TABLE Conversations (
+    conversation_id  BIGINT        NOT NULL IDENTITY(1,1),
+    user_id          BIGINT        NULL,      -- Khách đã login (FK từ bảng Users)
+    session_id       VARCHAR(100)  NOT NULL,  -- UUID cho khách vãng lai/vừa vào web
+    title            NVARCHAR(255) NULL,      -- VD: "Hỏi về phòng Penthouse"
+    status           VARCHAR(20)   NOT NULL DEFAULT 'ACTIVE',
+    created_at       DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
+    updated_at       DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
+
+    CONSTRAINT PK_Conversations        PRIMARY KEY (conversation_id),
+    -- Khớp với bảng Users của ông
+    CONSTRAINT FK_Conv_Users           FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE SET NULL,
+    CONSTRAINT CK_Conv_Status          CHECK (status IN ('ACTIVE','CLOSED'))
+);
+GO
+
+-- ----------------------------------------------------------
+-- 2.16 BẢNG: ChatMessages (Chi tiết tin nhắn)
+-- Kết nối: Conversations, Rooms, Bookings
+-- ----------------------------------------------------------
+CREATE TABLE ChatMessages (
+    message_id       BIGINT         NOT NULL IDENTITY(1,1),
+    conversation_id  BIGINT         NOT NULL,
+    role             VARCHAR(20)    NOT NULL, -- 'user' | 'assistant' | 'system'
+    content          NVARCHAR(MAX)  NOT NULL,
+    
+    -- Liên kết nghiệp vụ (AI có thể nhắc đến phòng hoặc booking cụ thể)
+    ref_room_id      BIGINT         NULL, -- Liên kết đến bảng Rooms
+    ref_booking_id   BIGINT         NULL, -- Liên kết đến bảng Bookings
+    
+    tokens_used      INT            NULL, -- Theo dõi chi phí OpenAI
+    created_at       DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
+
+    CONSTRAINT PK_ChatMessages         PRIMARY KEY (message_id),
+    CONSTRAINT FK_CM_Conversation      FOREIGN KEY (conversation_id) REFERENCES Conversations(conversation_id) ON DELETE CASCADE,
+    -- Khớp với bảng Rooms và Bookings của ông
+    CONSTRAINT FK_CM_Rooms             FOREIGN KEY (ref_room_id)    REFERENCES Rooms(room_id) ON DELETE SET NULL,
+    CONSTRAINT FK_CM_Bookings          FOREIGN KEY (ref_booking_id) REFERENCES Bookings(booking_id) ON DELETE SET NULL,
+    CONSTRAINT CK_CM_Role              CHECK (role IN ('user','assistant','system'))
+);
+GO
+CREATE NONCLUSTERED INDEX IX_ChatMessages_Conv_Date
+ON ChatMessages (conversation_id, created_at);
+GO 
 
 
 -- ============================================================
