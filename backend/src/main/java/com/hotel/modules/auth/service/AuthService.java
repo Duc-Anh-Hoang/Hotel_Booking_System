@@ -1,7 +1,9 @@
 package com.hotel.modules.auth.service;
 
 import com.hotel.common.config.JwtService;
+import com.hotel.modules.auth.entity.Role;
 import com.hotel.modules.auth.entity.User;
+import com.hotel.modules.auth.repository.RoleRepository;
 import com.hotel.modules.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,13 +13,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -32,12 +37,24 @@ public class AuthService {
             throw new RuntimeException("Email đã được sử dụng!");
         }
 
+        // Lấy quyền CUSTOMER mặc định
+        Role customerRole = roleRepository.findByRoleName("CUSTOMER")
+                .orElseGet(() -> {
+                    Role r = new Role();
+                    r.setRoleName("CUSTOMER");
+                    r.setDescription("Khách hàng mặc định");
+                    return roleRepository.save(r);
+                });
+        Set<Role> roles = new HashSet<>();
+        roles.add(customerRole);
+
         // Tạo user mới
         User user = User.builder()
                 .fullName(fullName)
                 .email(email)
                 .passwordHash(passwordEncoder.encode(password))
                 .phone(phone)
+                .roles(roles)
                 .isActive(true)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
