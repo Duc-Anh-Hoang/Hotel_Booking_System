@@ -1,6 +1,8 @@
 package com.hotel.modules.room.entity;
 
-import com.hotel.modules.room.entity.enums.BedType;import com.hotel.modules.room.entity.enums.RoomStatus;import jakarta.persistence.*;
+import com.hotel.modules.room.entity.enums.BedType;
+import com.hotel.modules.room.entity.enums.RoomStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
