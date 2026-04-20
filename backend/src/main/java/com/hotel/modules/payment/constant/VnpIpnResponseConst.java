@@ -8,5 +8,6 @@ public class VnpIpnResponseConst {
         public static final IpnResponse ORDER_NOT_FOUND = new IpnResponse("01", "Order not found");
         public static final IpnResponse ORDER_ALREADY_CONFIRMED = new IpnResponse("02", "Order already confirmed");
         public static final IpnResponse UNKNOWN_ERROR = new IpnResponse("99", "Unknown Error");
+        public static final IpnResponse INVALID_AMOUNT = new IpnResponse("04", "Invalid amount");
 
 }
