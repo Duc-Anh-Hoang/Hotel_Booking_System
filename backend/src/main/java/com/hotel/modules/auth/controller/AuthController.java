@@ -1,40 +1,37 @@
 package com.hotel.modules.auth.controller;
 
+import com.hotel.modules.auth.dto.AuthResponse;
+import com.hotel.modules.auth.dto.LoginRequest;
+import com.hotel.modules.auth.dto.RegisterRequest;
 import com.hotel.modules.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Các API liên quan đến Đăng nhập và Đăng ký")
 public class AuthController {
 
     private final AuthService authService;
 
-    // POST /api/v1/auth/register
+    @Operation(summary = "Đăng ký tài khoản mới", description = "Tạo một tài khoản khách hàng mới mang quyền CUSTOMER")
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(
-            @RequestBody Map<String, String> body) {
-        Map<String, String> result = authService.register(
-                body.get("fullName"),
-                body.get("email"),
-                body.get("password"),
-                body.get("phone")
-        );
+    public ResponseEntity<AuthResponse> register(
+            @Valid @RequestBody RegisterRequest request) {
+        AuthResponse result = authService.register(request);
         return ResponseEntity.ok(result);
     }
 
-    // POST /api/v1/auth/login
+    @Operation(summary = "Đăng nhập", description = "Đăng nhập để nhận chuỗi xác thực JWT Token dùng cho các API khác")
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(
-            @RequestBody Map<String, String> body) {
-        Map<String, String> result = authService.login(
-                body.get("email"),
-                body.get("password")
-        );
+    public ResponseEntity<AuthResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+        AuthResponse result = authService.login(request);
         return ResponseEntity.ok(result);
     }
 }

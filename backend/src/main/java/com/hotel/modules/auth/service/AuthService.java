@@ -1,6 +1,9 @@
 package com.hotel.modules.auth.service;
 
 import com.hotel.common.config.JwtService;
+import com.hotel.modules.auth.dto.AuthResponse;
+import com.hotel.modules.auth.dto.LoginRequest;
+import com.hotel.modules.auth.dto.RegisterRequest;
 import com.hotel.modules.auth.entity.Role;
 import com.hotel.modules.auth.entity.User;
 import com.hotel.modules.auth.repository.RoleRepository;
@@ -12,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -28,12 +29,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     // ── Đăng ký ───────────────────────────────────────────
-    public Map<String, String> register(String fullName,
-                                        String email,
-                                        String password,
-                                        String phone) {
+    public AuthResponse register(RegisterRequest request) {
         // Kiểm tra email đã tồn tại chưa
-        if (userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email đã được sử dụng!");
         }
 
@@ -50,10 +48,10 @@ public class AuthService {
 
         // Tạo user mới
         User user = User.builder()
-                .fullName(fullName)
-                .email(email)
-                .passwordHash(passwordEncoder.encode(password))
-                .phone(phone)
+                .fullName(request.getFullName())
+                .email(request.getEmail())
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
                 .roles(roles)
                 .isActive(true)
                 .createdAt(LocalDateTime.now())
@@ -64,30 +62,33 @@ public class AuthService {
 
         // Tạo token sau khi đăng ký
         String token = jwtService.generateAccessToken(user);
-        Map<String, String> result = new HashMap<>();
-        result.put("token", token);
-        result.put("message", "Đăng ký thành công!");
-        return result;
+        return AuthResponse.builder()
+                .token(token)
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .message("Đăng ký thành công!")
+                .build();
     }
 
     // ── Đăng nhập ─────────────────────────────────────────
-    public Map<String, String> login(String email, String password) {
+    public AuthResponse login(LoginRequest request) {
         // Spring Security tự kiểm tra email + password
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         // Lấy user từ DB
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản!"));
 
         // Tạo token
         String token = jwtService.generateAccessToken(user);
 
-        Map<String, String> result = new HashMap<>();
-        result.put("token", token);
-        result.put("email", user.getEmail());
-        result.put("fullName", user.getFullName());
-        return result;
+        return AuthResponse.builder()
+                .token(token)
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .message("Đăng nhập thành công!")
+                .build();
     }
 }

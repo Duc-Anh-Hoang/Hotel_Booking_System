@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(GET, "/rooms/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         // ── Cần đăng nhập ──
                         .requestMatchers("/bookings/**").hasAnyRole("CUSTOMER","ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -69,7 +70,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173", "http://localhost:80"));
+                "http://localhost:5173", "http://localhost:80", "http://localhost:8080"));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

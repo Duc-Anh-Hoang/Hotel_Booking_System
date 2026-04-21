@@ -4,6 +4,7 @@ import LoginPage from '~/features/auth/LoginPage'
 import RegisterPage from '~/features/auth/RegisterPage'
 import PrivateRoute from './PrivateRoute'
 import MainLayout from '../shared/components/layout/MainLayout'
+import DashboardPage from '~/features/dashboard/DashboardPage'
 
 const AppRoutes = () => {
   return (
@@ -19,7 +20,7 @@ const AppRoutes = () => {
         
         {/* Example protected blocks (cần đăng nhập, sẽ hiện sidebar) */}
         <Route element={<PrivateRoute />}>
-          {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
       </Route>
     </Routes>

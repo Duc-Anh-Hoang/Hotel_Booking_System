@@ -28,10 +28,11 @@ const RegisterPage = () => {
     if (formData.password !== formData.confirmPassword) {
       return setError('Mật khẩu xác nhận không khớp.')
     }
-
+    const { fullName, email, phone, password } = formData;
     setIsLoading(true)
     try {
-      const data = await registerApi(formData.fullName, formData.email, formData.phone, formData.password)
+      const data = await registerApi(fullName, email, phone, password);
+      console.log(data);
       // Auto login after register success
       login(data.token, { email: formData.email, fullName: formData.fullName, roles: [{ roleName: 'CUSTOMER' }] })
       navigate('/dashboard') // Route default after login
@@ -133,7 +134,7 @@ const RegisterPage = () => {
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
             Đã có tài khoản?{' '}
-            <Link to="/login" style={{ color: '#ffbfeb', textDecoration: 'none', fontWeight: 'bold' }}>
+            <Link to="/login" style={{ color: '#d26596ff', textDecoration: 'none', fontWeight: 'bold' }}>
               Đăng nhập
             </Link>
           </Typography>

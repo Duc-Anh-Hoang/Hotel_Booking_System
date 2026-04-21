@@ -55,6 +55,6 @@ public class JwtService {
     }
 
     private SecretKey getSignKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        return Keys.hmacShaKeyFor(secretKey.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 }
