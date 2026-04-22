@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Button, TextField, Typography, Paper, Alert, Grid } from '@mui/material'
+import { Box, Button, TextField, Typography, Paper, Alert, IconButton, InputAdornment } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../shared/hooks/useAuth'
 import { registerApi } from '../../shared/api/authApi'
@@ -12,6 +13,8 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: ''
   })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
@@ -32,10 +35,8 @@ const RegisterPage = () => {
     setIsLoading(true)
     try {
       const data = await registerApi(fullName, email, phone, password);
-      console.log(data);
-      // Auto login after register success
       login(data.token, { email: formData.email, fullName: formData.fullName, roles: [{ roleName: 'CUSTOMER' }] })
-      navigate('/dashboard') // Route default after login
+      navigate('/dashboard')
     } catch (err) {
       const data = err.response?.data;
       let errMsg = 'Đăng ký thất bại. Xin vui lòng thử lại.';
@@ -59,19 +60,31 @@ const RegisterPage = () => {
       bgcolor: 'background.default',
       p: 2
     }}>
-      <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 500, borderRadius: 3 }}>
-        <Typography variant="h4" align="center" color="primary" sx={{ mb: 1, fontWeight: 'bold' }}>
+      <Paper elevation={24} sx={{
+        p: 5,
+        width: '100%',
+        maxWidth: 600,
+        borderRadius: 4
+      }}>
+        <Typography variant="h4" align="center" color="secondary.main" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.5px' }}>
           Tạo tài khoản mới
         </Typography>
-        <Typography variant="body2" align="center" color="text.secondary" sx={{ mb: 3 }}>
-          Tham gia cùng chúng tôi để trải nghiệm dịch vụ đặt phòng tốt nhất
+        <Typography variant="body1" align="center" color="text.primary" sx={{ mb: 4 }}>
+          Tham gia cùng chúng tôi để trải nghiệm dịch vụ tốt nhất
         </Typography>
 
-        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+        {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
 
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          {/* Sử dụng CSS Grid để kiểm soát vị trí và độ rộng chính xác tuyệt đối */}
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)', // 2 cột bằng nhau
+            gap: 3, // Khoảng cách giữa các ô
+            width: '100%'
+          }}>
+            {/* Dòng 1: Họ tên và Email */}
+            <Box sx={{ gridColumn: 'span 1' }}>
               <TextField
                 fullWidth
                 label="Họ và tên"
@@ -80,8 +93,8 @@ const RegisterPage = () => {
                 onChange={handleChange}
                 required
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ gridColumn: 'span 1' }}>
               <TextField
                 fullWidth
                 label="Email"
@@ -91,59 +104,109 @@ const RegisterPage = () => {
                 onChange={handleChange}
                 required
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+
+            {/* Dòng 2: Số điện thoại và Mật khẩu */}
+            <Box sx={{ gridColumn: 'span 1' }}>
               <TextField
                 fullWidth
                 label="Số điện thoại"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                inputProps={{ maxLength: 20 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ gridColumn: 'span 1' }}>
               <TextField
                 fullWidth
                 label="Mật khẩu"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={formData.password}
                 onChange={handleChange}
                 required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+
+            {/* Dòng 3: Căn trái - Thẳng hàng với ô Họ và tên */}
+            <Box sx={{ gridColumn: 'span 1' }}>
               <TextField
                 fullWidth
                 label="Xác nhận mật khẩu"
                 name="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
 
           <Button
             fullWidth
             variant="contained"
-            color="primary"
             type="submit"
             size="large"
             disabled={isLoading}
-            sx={{ mt: 4, mb: 2, py: 1.5, fontWeight: 'bold' }}
+            sx={{
+              mt: 4,
+              py: 1.8,
+              fontWeight: 'bold',
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: '1.1rem',
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-1px)',
+                bgcolor: 'primary.dark',
+                boxShadow: '0 6px 20px rgba(231, 78, 134, 0.4)'
+              }
+            }}
           >
             {isLoading ? 'Đang xử lý...' : 'Đăng ký ngay'}
           </Button>
         </form>
 
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ mt: 4, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            Đã có tài khoản?{' '}
-            <Link to="/login" style={{ color: '#d26596ff', textDecoration: 'none', fontWeight: 'bold' }}>
+            Đã có tài khoản?{'  '}
+            <Box
+              component={Link}
+              to="/login"
+              sx={{
+                color: 'secondary.main',
+                textDecoration: 'none',
+                fontWeight: 700,
+                display: 'inline-block',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  color: 'secondary.dark',
+                  textShadow: '0 2px 10px rgba(154, 28, 72, 0.2)',
+                  textDecoration: 'underline'
+                }
+              }}
+            >
               Đăng nhập
-            </Link>
+            </Box>
           </Typography>
         </Box>
       </Paper>

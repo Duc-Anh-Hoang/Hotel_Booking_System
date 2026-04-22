@@ -4,6 +4,9 @@ const HEADER_HEIGHT = '58px'
 const PAYMENT_BAR_HEIGHT = '50px'
 
 const theme = extendTheme({
+  typography: {
+    fontFamily: '"Inter", sans-serif',
+  },
   hotel_booking: {
     headerHeight: HEADER_HEIGHT,
     payment: {
@@ -15,17 +18,29 @@ const theme = extendTheme({
     light: {
       palette: {
         primary: {
-          main: '#ffbfeb',
-          light: '#fcd0ed',
-          contrastText: '#ffffff'
+          main: '#ffc7dbff',      // Màu nền nút bấm chính
+          dark: '#c02860ff',      // Màu nền nút khi hover
+          contrastText: '#a01b4ccd' // Màu chữ trong nút
+        },
+        secondary: {
+          main: '#9a1c48ff',      // Màu chữ Welcome, Link chính
+          dark: '#c02860ff'       // Màu Link khi hover
         },
         text: {
-          primary: '#383838',
-          secondary: '#606060'
+          primary: '#000000',     // Màu chữ chính (đen)
+          secondary: '#606060'    // Màu chữ phụ (xám)
         },
         background: {
-          paper: '#ffffff',
-          default: '#fafafa'
+          paper: 'rgba(255, 255, 255, 0.92)', // Nền trắng mờ (Glassmorphism)
+          default: '#ccebffff'                // Nền xanh nhạt của trang
+        },
+        // Thêm các màu tùy chỉnh cho Input
+        action: {
+          inputBg: '#e8f6ffff',
+          inputLabel: '#cbbbc2ff',
+          inputLabelFocus: '#ac184ecd',
+          inputBorder: '#c8acb8ff',
+          inputBorderFocus: '#b0305fcd'
         }
       }
     }
@@ -35,19 +50,27 @@ const theme = extendTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+          fontFamily: '"Inter", sans-serif'
         },
         body1: { fontSize: '0.875rem' },
         h6: { fontWeight: '550' }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+        }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
           fontSize: '0.875rem',
-          color: theme.vars.palette.primary.main,
+          color: theme.vars.palette.action.inputLabel,
           '&.Mui-focused': {
-            color: theme.vars.palette.primary.main
+            color: theme.vars.palette.action.inputLabelFocus
           }
         })
       }
@@ -55,19 +78,19 @@ const theme = extendTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: '8px',
+          borderRadius: '16px',
           fontSize: '0.875rem',
-          backgroundColor: '#fff',
+          backgroundColor: theme.vars.palette.action.inputBg,
           '& fieldset': {
-            borderColor: theme.vars.palette.primary.main
+            borderColor: theme.vars.palette.action.inputBorder
           },
           '&:hover fieldset': {
-            borderColor: `${theme.vars.palette.primary.main} !important`,
+            borderColor: `${theme.vars.palette.action.inputBorderFocus} !important`,
             borderWidth: '1.5px'
           },
           '&.Mui-focused fieldset': {
-            borderColor: theme.vars.palette.primary.main,
-            borderWidth: '1px'
+            borderColor: `${theme.vars.palette.action.inputBorderFocus} !important`,
+            borderWidth: '1.5px'
           }
         }),
         input: {
@@ -78,9 +101,24 @@ const theme = extendTheme({
     MuiTextField: {
       defaultProps: {
         size: 'small'
+      },
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '&:hover .MuiInputLabel-root': {
+            color: theme.vars.palette.action.inputLabelFocus
+          }
+        })
       }
     },
-    // Fix luôn cho Select để đồng bộ với TextField
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            color: '#fff'
+          }
+        }
+      }
+    },
     MuiSelect: {
       styleOverrides: {
         select: {

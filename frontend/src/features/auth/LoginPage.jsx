@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Button, TextField, Typography, Paper, Alert } from '@mui/material'
+import { Box, Button, TextField, Typography, Paper, Alert, IconButton, InputAdornment } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../shared/hooks/useAuth'
 import { loginApi } from '../../shared/api/authApi'
@@ -7,10 +8,13 @@ import { loginApi } from '../../shared/api/authApi'
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuth()
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -20,7 +24,7 @@ const LoginPage = () => {
     try {
       const data = await loginApi(email, password)
       login(data.token, { email: data.email, fullName: data.fullName, roles: data.roles || [] })
-      navigate('/dashboard') // Or some default page
+      navigate('/dashboard')
     } catch (err) {
       const data = err.response?.data;
       let errMsg = 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin.';
@@ -34,28 +38,26 @@ const LoginPage = () => {
       setIsLoading(false)
     }
   }
+
   return (
     <Box sx={{
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      bgcolor: '#d7d0ffff', // Màu nền lớn của cả trang
+      bgcolor: 'background.default',
       p: 2
     }}>
       <Paper elevation={24} sx={{
         p: 5,
         width: '100%',
         maxWidth: 420,
-        borderRadius: 4,
-        background: 'rgba(255, 255, 255, 0.92)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
+        borderRadius: 4
       }}>
-        <Typography variant="h4" align="center" color="#9a1c48ff" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.5px' }}> {/* Màu chữ Welcome Back */}
+        <Typography variant="h4" align="center" color="secondary.main" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.5px' }}>
           Welcome Back
         </Typography>
-        <Typography variant="body1" align="center" color="#000" sx={{ mb: 4 }}>
+        <Typography variant="body1" align="center" color="text.primary" sx={{ mb: 4 }}>
           Đăng nhập vào tài khoản Hotel Booking của bạn
         </Typography>
 
@@ -71,40 +73,25 @@ const LoginPage = () => {
             margin="normal"
             required
             autoFocus
-            InputProps={{ sx: { borderRadius: 2 } }}
-            sx={{
-              backgroundColor: '#d1c8ffff', // Màu nền ô nhập
-              borderRadius: 2,
-              input: { color: '#000' }, // Màu chữ gõ vào
-              '& .MuiInputLabel-root': { color: '#b0305fcd' }, // Màu chữ nhãn
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#b0305fcd', // Màu viền ô nhập
-                }
-              }
-            }}
           />
           <TextField
             fullWidth
             label="Mật khẩu"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
             required
-            sx={{
-              mb: 4, mt: 2,
-              backgroundColor: '#d1c8ffff', // Màu nền ô nhập
-              borderRadius: 2,
-              input: { color: '#000' }, // Màu chữ gõ vào
-              '& .MuiInputLabel-root': { color: '#b0305fcd' }, // Màu chữ nhãn
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#b0305fcd', // Màu viền ô nhập
-                }
-              }
+            sx={{ mb: 4, mt: 2 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
-            InputProps={{ sx: { borderRadius: 2 } }}
           />
           <Button
             fullWidth
@@ -113,21 +100,17 @@ const LoginPage = () => {
             size="large"
             disabled={isLoading}
             sx={{
-              bgcolor: '#e6b1c4ff', // Màu nền nút lúc đầu
-              color: '#c2597fcd', // Màu chữ trong nút
               py: 1.8,
               fontWeight: 'bold',
               borderRadius: 2,
               textTransform: 'none',
               fontSize: '1.1rem',
-              boxShadow: '0 4px 14px 0 rgba(204, 124, 153, 0.39)',
+              transition: 'all 0.2s ease-in-out',
               '&:hover': {
                 transform: 'translateY(-1px)',
-                bgcolor: '#c02860ff', // Màu nền nút khi hover
-                color: '#fff',
+                bgcolor: 'primary.dark',
                 boxShadow: '0 6px 20px rgba(231, 78, 134, 0.4)'
-              },
-              transition: 'all 0.2s ease-in-out'
+              }
             }}
           >
             {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
@@ -136,10 +119,25 @@ const LoginPage = () => {
 
         <Box sx={{ mt: 4, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            Chưa có tài khoản?{' '}
-            <Link to="/register" style={{ color: '#9a1c48ff', textDecoration: 'none', fontWeight: 700 }}> {/* Màu chữ Đăng ký ngay */}
+            Chưa có tài khoản?{'  '}
+            <Box
+              component={Link}
+              to="/register"
+              sx={{
+                color: 'secondary.main',
+                textDecoration: 'none',
+                fontWeight: 700,
+                display: 'inline-block',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  color: 'secondary.dark',
+                  textShadow: '0 2px 10px rgba(154, 28, 72, 0.2)',
+                  textDecoration: 'underline'
+                }
+              }}
+            >
               Đăng ký ngay
-            </Link>
+            </Box>
           </Typography>
         </Box>
       </Paper>
