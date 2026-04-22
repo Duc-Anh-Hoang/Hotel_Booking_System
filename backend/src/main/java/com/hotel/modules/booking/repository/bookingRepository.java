@@ -24,19 +24,18 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByRoomId(@Param("roomId") Long roomId);
 
 
+    // Kiểm tra trùng lịch
     @Query("""
-       SELECT COUNT(b) FROM Booking b
-       WHERE b.room.roomId = :roomId
-       AND b.status IN :statuses
-       AND b.checkInDate < :checkOutDate
-       AND b.checkOutDate > :checkInDate
-       AND (:excludeBookingId IS NULL OR b.bookingId <> :excludeBookingId)
-       """)
-    List<Booking> findConflictingBookings(
-       @Param("roomId")            Long roomId,
-       @Param("checkInDate")       LocalDate checkInDate,
-       @Param("checkOutDate")      LocalDate checkOutDate,
-       @Param("excludeBookingId")  Long excludeBookingId
+    SELECT COUNT(b) > 0 FROM Booking b
+    WHERE b.room.roomId = :roomId
+    AND b.status NOT IN ('CANCELLED', 'REFUNDED')
+    AND b.checkInDate < :checkOut
+    AND b.checkOutDate > :checkIn
+""")
+    boolean existsConflictBooking(
+            @Param("roomId") Long roomId,
+            @Param("checkIn") LocalDate checkIn,
+            @Param("checkOut") LocalDate checkOut
     );
 }
 

@@ -105,5 +105,8 @@ public class BookingService {
 //    public void checkOut(Long bookingId);
 //    public void createBooking(...);
 //    public void cancelBooking(...);
+      public void checkAvailableRoom(){
+        
+      }
 
 }
