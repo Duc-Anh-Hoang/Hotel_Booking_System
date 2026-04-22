@@ -1,7 +1,7 @@
 package com.hotel.modules.email.service;
 
+import com.hotel.modules.auth.entity.User;
 import com.hotel.modules.booking.entity.Booking;
-import com.hotel.modules.booking.entity.User;
 import com.hotel.modules.email.dto.EmailRequest;
 import com.hotel.modules.room.entity.Room;
 import jakarta.mail.MessagingException;

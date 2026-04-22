@@ -23,41 +23,41 @@ import java.time.LocalTime;
 @RequestMapping("/invoices")
 @RequiredArgsConstructor
 public class InvoiceController {
-    private final InvoiceService invoiceService;
-
-
-    @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@Validated @RequestBody InvoiceCreateRequest request){
-        Invoice newInvoice=  invoiceService.createInvoice(request);
-        return  ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newInvoice);
-    }
-
-    @GetMapping("/{id}")
-    public  ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id){
-        Invoice foundInvoice = invoiceService.getInvoiceById(id);
-        return ResponseEntity.ok(foundInvoice);
-    }
-
-    @GetMapping("/booking/{bookingId}")
-    public ResponseEntity<Invoice> getInvoiceByBookingId(@PathVariable("bookingId") Long bookingId) {
-        Invoice invoice = invoiceService.getInvoiceByBookingId(bookingId);
-        return ResponseEntity.ok(invoice);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<Invoice>> getAllInvoices(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-
-        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
-        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(LocalTime.MAX) : null;
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by("issuedAt").descending());
-        Page<Invoice> invoices = invoiceService.getInvoices(startDateTime, endDateTime, pageable);
-
-        return ResponseEntity.ok(invoices);
-    }
+//    private final InvoiceService invoiceService;
+//
+//
+//    @PostMapping
+//    public ResponseEntity<Invoice> createInvoice(@Validated @RequestBody InvoiceCreateRequest request){
+//        Invoice newInvoice=  invoiceService.createInvoice(request);
+//        return  ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newInvoice);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public  ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id){
+//        Invoice foundInvoice = invoiceService.getInvoiceById(id);
+//        return ResponseEntity.ok(foundInvoice);
+//    }
+//
+//    @GetMapping("/booking/{bookingId}")
+//    public ResponseEntity<Invoice> getInvoiceByBookingId(@PathVariable("bookingId") Long bookingId) {
+//        Invoice invoice = invoiceService.getInvoiceByBookingId(bookingId);
+//        return ResponseEntity.ok(invoice);
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<Page<Invoice>> getAllInvoices(
+//            @RequestParam(value = "page", defaultValue = "0") int page,
+//            @RequestParam(value = "size", defaultValue = "10") int size,
+//            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//
+//
+//        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
+//        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(LocalTime.MAX) : null;
+//
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("issuedAt").descending());
+//        Page<Invoice> invoices = invoiceService.getInvoices(startDateTime, endDateTime, pageable);
+//
+//        return ResponseEntity.ok(invoices);
+//    }
 }

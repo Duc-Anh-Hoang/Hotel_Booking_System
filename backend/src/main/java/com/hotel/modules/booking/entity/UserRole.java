@@ -1,5 +1,7 @@
 package com.hotel.modules.booking.entity;
 
+import com.hotel.modules.auth.entity.Role;
+import com.hotel.modules.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
