@@ -37,7 +37,14 @@ const RegisterPage = () => {
       login(data.token, { email: formData.email, fullName: formData.fullName, roles: [{ roleName: 'CUSTOMER' }] })
       navigate('/dashboard') // Route default after login
     } catch (err) {
-      setError(err.response?.data?.message || 'Đăng ký thất bại. Email có thể đã được sử dụng.')
+      const data = err.response?.data;
+      let errMsg = 'Đăng ký thất bại. Xin vui lòng thử lại.';
+      if (data) {
+        if (data.message) errMsg = data.message;
+        else if (data.error) errMsg = data.error;
+        else if (typeof data === 'object' && Object.keys(data).length > 0) errMsg = Object.values(data)[0];
+      }
+      setError(errMsg);
     } finally {
       setIsLoading(false)
     }

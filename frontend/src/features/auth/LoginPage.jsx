@@ -22,7 +22,14 @@ const LoginPage = () => {
       login(data.token, { email: data.email, fullName: data.fullName, roles: data.roles || [] })
       navigate('/dashboard') // Or some default page
     } catch (err) {
-      setError(err.response?.data?.message || 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin.')
+      const data = err.response?.data;
+      let errMsg = 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin.';
+      if (data) {
+        if (data.message) errMsg = data.message;
+        else if (data.error) errMsg = data.error;
+        else if (typeof data === 'object' && Object.keys(data).length > 0) errMsg = Object.values(data)[0];
+      }
+      setError(errMsg);
     } finally {
       setIsLoading(false)
     }
