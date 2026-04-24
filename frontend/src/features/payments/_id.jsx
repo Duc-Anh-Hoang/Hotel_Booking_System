@@ -27,7 +27,6 @@ function Payments() {
             radial-gradient(circle 600px at 100% 500px, #fce7f3, transparent) 
           `
       }}>
-      <Header />
       <PaymentBar activeStep={activeStep} />
 
       {step === 0 && <Review />}

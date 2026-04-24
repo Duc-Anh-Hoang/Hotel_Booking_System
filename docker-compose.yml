@@ -8,6 +8,7 @@ volumes:
   sqlserver-data:
   backend-logs:
 
+
 services:
 
   sqlserver:
@@ -37,10 +38,7 @@ services:
       test:
         - "CMD-SHELL"
         - >
-          /opt/mssql-tools18/bin/sqlcmd
-          -S localhost -U sa -P "$$MSSQL_SA_PASSWORD"
-          -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.databases WHERE name='HotelBookingDB'"
-          -h -1 -No -C 2>/dev/null | grep -q "1"
+          /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.databases WHERE name='HotelBookingDB'" -h -1 -No -C 2>/dev/null | grep -q "1"
       interval: 20s
       timeout: 15s
       retries: 20
@@ -98,7 +96,7 @@ services:
     networks:
       - hbms-network
     ports:
-      - "80:80"
+      - "3000:80"
     depends_on:
       - backend
     restart: unless-stopped

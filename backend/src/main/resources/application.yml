@@ -8,7 +8,7 @@ spring:
       api-key: "sk-placeholder"
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: false
     properties:
       hibernate:
@@ -138,7 +138,7 @@ app:
     expiration: ${APP_JWT_EXPIRATION:900000}
     refresh-expiration: ${APP_JWT_REFRESH_EXPIRATION:604800000}
   cors:
-    allowed-origins: "http://localhost,http://localhost:5173"
+    allowed-origins: "http://localhost,http://localhost:5173,http://localhost:3000"
   payment:
     vnpay:
       tmn-code: ${APP_VNPAY_TMN_CODE}
