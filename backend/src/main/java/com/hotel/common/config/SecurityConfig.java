@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         // ── Cần đăng nhập ──
                         .requestMatchers("/bookings/**").hasAnyRole("CUSTOMER","ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/dashboard/**", "/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter,

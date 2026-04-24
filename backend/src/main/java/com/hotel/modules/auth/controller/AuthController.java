@@ -46,4 +46,12 @@ public class AuthController {
         authService.resetPassword(request);
         return ResponseEntity.ok("Mật khẩu của bạn đã được thay đổi thành công.");
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            java.security.Principal principal) {
+        authService.changePassword(principal.getName(), request);
+        return ResponseEntity.ok("Mật khẩu của bạn đã được thay đổi thành công.");
+    }
 }

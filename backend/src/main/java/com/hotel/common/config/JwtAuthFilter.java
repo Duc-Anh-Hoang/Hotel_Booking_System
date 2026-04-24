@@ -36,21 +36,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authHeader.substring(7);
-        String email = jwtService.extractUsername(token);
+        try {
+            String token = authHeader.substring(7);
+            String email = jwtService.extractUsername(token);
 
-        if (email != null && SecurityContextHolder.getContext()
-                .getAuthentication() == null) {
-            UserDetails user = userDetailsService.loadUserByUsername(email);
-            if (jwtService.isTokenValid(token, user)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                user, null, user.getAuthorities());
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            if (email != null && SecurityContextHolder.getContext()
+                    .getAuthentication() == null) {
+                UserDetails user = userDetailsService.loadUserByUsername(email);
+                if (jwtService.isTokenValid(token, user)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    user, null, user.getAuthorities());
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            // Nếu token hết hạn hoặc không hợp lệ, trả về 401 thay vì văng lỗi 500
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired or invalid: " + e.getMessage());
         }
-        chain.doFilter(request, response);
     }
 }
