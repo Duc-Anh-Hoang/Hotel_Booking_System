@@ -104,7 +104,7 @@ public class AuthService {
         userRepository.save(user);
 
         // Gửi email (link này sẽ trỏ về Frontend)
-        String resetLink = "http://localhost/reset-password?token=" + token;
+        String resetLink = "http://localhost:3000/reset-password?token=" + token;
         String emailContent = "Chào " + user.getFullName() + ",\n\n" +
                 "Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng click vào link sau để thực hiện:\n" +
                 resetLink + "\n\n" +

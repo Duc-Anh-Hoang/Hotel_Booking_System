@@ -90,20 +90,20 @@ app:
     expiration: 900000
     refresh-expiration: 604800000
   cors:
-    allowed-origins: "http://localhost:5173,http://localhost:3000"
+    allowed-origins: "http://localhost:3000"
   payment:
     vnpay:
       tmn-code: BJ1R655A
       hash-secret: MEBTJSYPU2ISDEAG32UYTLHRB70DU37J
       pay-url:  https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-      return-url: http://localhost:5173/payment/?step=3
+      return-url: http://localhost:3000/payment/?step=3
       timeout: 15
     momo:
       partner-code: MOMOLRJZ20181206
       access-key: mTCKt9W3eU1m39TW
       secret-key: SetA5RDnLHvt51AULf51DyauxUo3kDU6
       endpoint-url: https://test-payment.momo.vn/v2/gateway/api/create
-      return-url: http://localhost:5173/payment/
+      return-url: http://localhost:3000/payment/
       request-type: captureWallet
       ipn-url: https://webhook.site/784642fe-feb2-4b1e-a31f-65e2e9349f6d
 
@@ -145,20 +145,20 @@ app:
     expiration: ${APP_JWT_EXPIRATION:900000}
     refresh-expiration: ${APP_JWT_REFRESH_EXPIRATION:604800000}
   cors:
-    allowed-origins: "http://localhost,http://localhost:5173,http://localhost:3000"
+    allowed-origins: "http://localhost:3000,http://localhost"
   payment:
     vnpay:
       tmn-code: ${APP_VNPAY_TMN_CODE}
       hash-secret: ${APP_VNPAY_HASH_SECRET}
       pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-      return-url: http://localhost:5173/payment/?step=3
+      return-url: http://localhost:3000/payment/?step=3
       timeout: 15
     momo:
       partner-code: ${APP_MOMO_PARTNER_CODE}
       access-key: ${APP_MOMO_ACCESS_KEY}
       secret-key: ${APP_MOMO_SECRET_KEY}
       endpoint-url: https://test-payment.momo.vn/v2/gateway/api/create
-      return-url: http://localhost:5173/payment/?step=3
+      return-url: http://localhost:3000/payment/?step=3
       request-type: captureWallet
       ipn-url: ${APP_MOMO_IPN_URL:https://webhook.site/784642fe-feb2-4b1e-a31f-65e2e9349f6d}
   openai:
