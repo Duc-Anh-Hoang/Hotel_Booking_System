@@ -28,6 +28,7 @@ public class BookingDTO {
     private LocalDateTime expiresAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private BigDecimal totalAmount;    // Tính tổng tiền booking (chưa tính ExtraService)
 
     // ── Thông tin User (lấy từ booking.getUser()) ─────
     private Long userId;

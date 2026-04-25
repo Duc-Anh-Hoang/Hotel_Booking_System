@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -76,6 +77,14 @@ public class BookingService {
             if (booking.getRoom().getRoomType() != null) {
                 dto.setRoomTypeName(booking.getRoom().getRoomType().getTypeName());
             }
+        }
+
+        // Trong toDTO()
+        if (booking.getRoomPriceSnapshot() != null && booking.getTotalNights() != null) {
+            dto.setTotalAmount(
+                    booking.getRoomPriceSnapshot()
+                            .multiply(BigDecimal.valueOf(booking.getTotalNights()))
+            );
         }
 
         return dto;
